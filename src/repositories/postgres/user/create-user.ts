@@ -1,8 +1,8 @@
 import { prisma } from "../../../app"
-import { CreateUserUseCaseParams } from "../../../types/create-user"
+import { CreateUserParams } from "../../../types/create-user"
 
 export class PostgresCreateUserRepository {
-  async execute({ params }: CreateUserUseCaseParams) {
+  async execute({ params }: CreateUserParams) {
     const user = await prisma.user.create({
       data: {
         firstName: params.firstName,

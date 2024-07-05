@@ -1,5 +1,5 @@
 import { User } from "@prisma/client"
 
-export interface CreateUserUseCaseParams {
+export interface CreateUserParams {
   params: User
 }
