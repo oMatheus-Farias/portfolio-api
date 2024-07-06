@@ -7,3 +7,8 @@ export const internalServerError = (message: string) => ({
   statusCode: 500,
   message,
 })
+
+export const notFound = (message: string) => ({
+  statusCode: 404,
+  message,
+})
