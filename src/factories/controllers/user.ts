@@ -11,10 +11,13 @@ import { CreateUserUseCase, GetUserByEmailUseCase } from "../../use-cases"
 
 export const makeCreateUserController = () => {
   const createUserRepository = new PostgresCreateUserRepository()
+  const postgresGetUserByEmailRepository =
+    new PostgresGetUserByEmailRepository()
   const passwordHasherAdapter = new PasswordHasherAdapter()
 
   const createUserUseCase = new CreateUserUseCase(
     createUserRepository,
+    postgresGetUserByEmailRepository,
     passwordHasherAdapter,
   )
 

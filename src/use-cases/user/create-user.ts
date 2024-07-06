@@ -1,28 +1,27 @@
-import { prisma } from "../../app"
-
-import { PostgresCreateUserRepository } from "../../repositories/postgres/user/create-user"
+import {
+  PostgresCreateUserRepository,
+  PostgresGetUserByEmailRepository,
+} from "../../repositories/postgres"
 import { PasswordHasherAdapter } from "../../adapters/password-hasher"
 
-import { CreateUserParams } from "../../types/create-user"
-
 import { EmailAlreadyExistsError } from "../../errors"
+
+import { CreateUserParams } from "../../types/create-user"
 
 export class CreateUserUseCase {
   constructor(
     private postgresCreateUserRepository: PostgresCreateUserRepository,
+    private postgresGetUserByEmailRepository: PostgresGetUserByEmailRepository,
     private passwordHasherAdapter: PasswordHasherAdapter,
   ) {
     this.postgresCreateUserRepository = postgresCreateUserRepository
+    this.postgresGetUserByEmailRepository = postgresGetUserByEmailRepository
     this.passwordHasherAdapter = passwordHasherAdapter
   }
 
   async execute({ params }: CreateUserParams) {
-    //FIXME - Refactor, add PostgresGetUserByEmailRepository
-    const emailAlreadyExists = await prisma.user.findUnique({
-      where: {
-        email: params.email,
-      },
-    })
+    const emailAlreadyExists =
+      await this.postgresGetUserByEmailRepository.execute(params.email)
 
     if (emailAlreadyExists) {
       throw new EmailAlreadyExistsError(params.email)
