@@ -1,5 +1,8 @@
 import { Router, Request, Response } from "express"
-import { makeCreateUserController } from "./factories/controllers"
+import {
+  makeCreateUserController,
+  makeGetUserByEmailController,
+} from "./factories/controllers"
 
 export const router = Router()
 
@@ -20,6 +23,21 @@ router.post("/api/user", async (req: Request, res: Response) => {
       lastName: string
       email: string
       password: string
+    }
+  }
+
+  res.status(statusCode).json(body)
+})
+
+router.get("/api/user/email", async (req: Request, res: Response) => {
+  const getUserByEmailController = makeGetUserByEmailController()
+
+  const { statusCode, body } = (await getUserByEmailController.execute(
+    req.body.email,
+  )) as unknown as {
+    statusCode: number
+    body: {
+      email: string
     }
   }
 
