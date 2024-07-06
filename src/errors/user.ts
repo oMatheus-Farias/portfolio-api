@@ -4,3 +4,10 @@ export class EmailAlreadyExistsError extends Error {
     this.name = "EmailAlreadyExistsError"
   }
 }
+
+export class UserNotFoundError extends Error {
+  constructor(email: string) {
+    super(`User with email ${email} not found`)
+    this.name = "UserNotFoundError"
+  }
+}
