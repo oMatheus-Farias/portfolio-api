@@ -22,7 +22,7 @@ export class GetUserByEmailController {
       const user = await this.getUserByEmailUseCase.execute(email)
 
       return {
-        status: 200,
+        statusCode: 200,
         body: user,
       }
     } catch (error) {
