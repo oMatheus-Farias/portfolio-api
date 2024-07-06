@@ -5,15 +5,15 @@ export const badRequest = (message: string) => ({
   },
 })
 
-export const internalServerError = (message: string) => ({
-  statusCode: 500,
+export const notFound = (message: string) => ({
+  statusCode: 404,
   body: {
     message,
   },
 })
 
-export const notFound = (message: string) => ({
-  statusCode: 404,
+export const internalServerError = (message: string) => ({
+  statusCode: 500,
   body: {
     message,
   },

@@ -1,5 +1,5 @@
 import { prisma } from "../../../app"
-import { CreateUserParams } from "../../../types/create-user"
+import { CreateUserParams } from "../../../@types/create-user"
 
 export class PostgresCreateUserRepository {
   async execute({ params }: CreateUserParams) {

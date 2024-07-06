@@ -6,7 +6,7 @@ import { PasswordHasherAdapter } from "../../adapters/password-hasher"
 
 import { EmailAlreadyExistsError } from "../../errors"
 
-import { CreateUserParams } from "../../types/create-user"
+import { CreateUserParams } from "../../@types/create-user"
 
 export class CreateUserUseCase {
   constructor(
