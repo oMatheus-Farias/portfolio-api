@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express"
 import {
+  makeAuthUserController,
   makeCreateUserController,
   makeGetUserByEmailController,
 } from "./factories/controllers"
@@ -40,6 +41,17 @@ router.get("/api/user/email", async (req: Request, res: Response) => {
       email: string
     }
   }
+
+  res.status(statusCode).json(body)
+})
+
+router.post("/api/user/auth", async (req: Request, res: Response) => {
+  const authUserController = makeAuthUserController()
+
+  const { statusCode, body } = await authUserController.execute(
+    req.body.email,
+    req.body.password,
+  )
 
   res.status(statusCode).json(body)
 })
