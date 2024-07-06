@@ -1,7 +1,13 @@
 import { PasswordHasherAdapter } from "../../adapters/password-hasher"
-import { CreateUserController } from "../../controllers"
-import { PostgresCreateUserRepository } from "../../repositories/postgres"
-import { CreateUserUseCase } from "../../use-cases"
+import {
+  CreateUserController,
+  GetUserByEmailController,
+} from "../../controllers"
+import {
+  PostgresCreateUserRepository,
+  PostgresGetUserByEmailRepository,
+} from "../../repositories/postgres"
+import { CreateUserUseCase, GetUserByEmailUseCase } from "../../use-cases"
 
 export const makeCreateUserController = () => {
   const createUserRepository = new PostgresCreateUserRepository()
@@ -15,4 +21,19 @@ export const makeCreateUserController = () => {
   const createUserController = new CreateUserController(createUserUseCase)
 
   return createUserController
+}
+
+export const makeGetUserByEmailController = () => {
+  const postgresGetUserByEmailRepository =
+    new PostgresGetUserByEmailRepository()
+
+  const getUserByEmailUseCase = new GetUserByEmailUseCase(
+    postgresGetUserByEmailRepository,
+  )
+
+  const getUserByEmailController = new GetUserByEmailController(
+    getUserByEmailUseCase,
+  )
+
+  return getUserByEmailController
 }
