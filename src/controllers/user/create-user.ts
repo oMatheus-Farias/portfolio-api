@@ -1,10 +1,12 @@
 import { User } from "@prisma/client"
 
+import { ZodError } from "zod"
+import { createUserSquema } from "../../schemas"
+
 import { CreateUserUseCase } from "../../use-cases/user/create-user"
 
 import {
   EmailAlreadyExistsError,
-  MissingFieldsError,
   badRequest,
   internalServerError,
 } from "../../errors"
@@ -20,15 +22,7 @@ export class CreateUserController {
 
   async execute({ httRequest }: CreateUserControllerParams) {
     try {
-      //FIXME - Refactor, add zod validation
-      if (
-        !httRequest.firstName ||
-        !httRequest.lastName ||
-        !httRequest.email ||
-        !httRequest.password
-      ) {
-        throw new MissingFieldsError()
-      }
+      await createUserSquema.parseAsync(httRequest)
 
       const user = await this.createUserUseCase.execute({
         params: httRequest,
@@ -39,6 +33,10 @@ export class CreateUserController {
         body: user,
       }
     } catch (error) {
+      if (error instanceof ZodError) {
+        return badRequest(error.errors[0].message)
+      }
+
       if (error instanceof EmailAlreadyExistsError) {
         return badRequest(error.message)
       }
