@@ -4,3 +4,12 @@ export class ProjectNameAlreadyExistsError extends Error {
     this.name = "ProjectNameAlreadyExistsError"
   }
 }
+
+export class ProjectNotFoundError extends Error {
+  constructor(projectName?: string) {
+    projectName
+      ? super(`Project with name ${projectName} not found`)
+      : super("Project not found")
+    this.name = "ProjectNotFoundError"
+  }
+}
