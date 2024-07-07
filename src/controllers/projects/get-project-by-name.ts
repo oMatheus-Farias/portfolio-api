@@ -1,7 +1,9 @@
-import { ZodError } from "zod"
 import { GetProjectByNameUseCase } from "../../use-cases"
-import { badRequest, internalServerError, notFound } from "../../errors"
+
+import { ZodError } from "zod"
 import { ProjectNotFoundError } from "../../errors/project"
+import { badRequest, internalServerError, notFound } from "../../errors"
+
 import { getProjectByNameSchema } from "../../schemas/projects"
 
 export class GetProjectByNameController {
