@@ -69,3 +69,17 @@ export const createProjectsSchema = z.object({
       message: "User ID must be a valid UUID.",
     }),
 })
+
+export const getProjectByNameSchema = z.object({
+  name: z
+    .string({
+      required_error: "Name is required.",
+    })
+    .trim()
+    .min(1, {
+      message: "Name is required.",
+    })
+    .max(50, {
+      message: "Name must be at most 50 characters.",
+    }),
+})
