@@ -1,9 +1,12 @@
 import { Router, Request, Response } from "express"
 import {
   makeAuthUserController,
+  makeCreateProjectController,
   makeCreateUserController,
   makeGetUserByEmailController,
 } from "./factories/controllers"
+
+import { isAuthenticated } from "./middlewares/is-authenticated"
 
 export const router = Router()
 
@@ -55,3 +58,28 @@ router.post("/api/user/auth", async (req: Request, res: Response) => {
 
   res.status(statusCode).json(body)
 })
+
+router.post(
+  "/api/project",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const createProjectController = makeCreateProjectController()
+
+    const { statusCode, body } = (await createProjectController.execute({
+      httpRequest: req.body,
+    })) as {
+      statusCode: number
+      body: {
+        name: string
+        description: string
+        imagesUrl: string[]
+        repositoryUrl: string
+        projectUrl: string
+        technologies: string[]
+        userId: string
+      }
+    }
+
+    res.status(statusCode).json(body)
+  },
+)
