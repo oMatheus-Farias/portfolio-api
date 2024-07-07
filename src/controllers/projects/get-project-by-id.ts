@@ -6,7 +6,7 @@ import { ZodError } from "zod"
 import { ProjectNotFoundError } from "../../errors/project"
 import { badRequest, internalServerError } from "../../errors"
 
-import { getProjectByIdSchema } from "../../schemas/projects"
+import { getByIdSchema } from "../../schemas/projects"
 
 export class GetProjectByIdController {
   constructor(private getProjectByIdUseCase: GetProjectByIdUseCase) {
@@ -23,7 +23,7 @@ export class GetProjectByIdController {
         )
       }
 
-      await getProjectByIdSchema.parseAsync({ id: projectId })
+      await getByIdSchema.parseAsync({ id: projectId })
 
       const project = await this.getProjectByIdUseCase.execute(projectId)
 

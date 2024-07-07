@@ -84,7 +84,7 @@ export const getProjectByNameSchema = z.object({
     }),
 })
 
-export const getProjectByIdSchema = z.object({
+export const getByIdSchema = z.object({
   id: z
     .string({
       required_error: "ID is required.",
