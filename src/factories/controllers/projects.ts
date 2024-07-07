@@ -2,18 +2,21 @@ import {
   CreateProjectController,
   GetProjectByNameController,
   GetProjectByIdController,
+  GetProjectsByUserIdController,
 } from "../../controllers"
 
 import {
   PostgresCreateProjectRepository,
   PostgresGetProjectByNameRepository,
   PostgresGetProjectByIdRepository,
+  PostgresGetProjectsByUserIdRepository,
 } from "../../repositories/postgres"
 
 import {
   CreateProjectUseCase,
   GetProjectByNameUseCase,
   GetProjectByIdUseCase,
+  GetProjectsByUserIdUseCase,
 } from "../../use-cases"
 
 export const makeCreateProjectController = () => {
@@ -61,4 +64,19 @@ export const makeGetProjectByIdController = () => {
   )
 
   return getProjectByIdController
+}
+
+export const makeGetProjectsByUserIdController = () => {
+  const postgresGetProjectsByUserIdRepository =
+    new PostgresGetProjectsByUserIdRepository()
+
+  const getProjectsByUserIdUseCase = new GetProjectsByUserIdUseCase(
+    postgresGetProjectsByUserIdRepository,
+  )
+
+  const getProjectsByUserIdController = new GetProjectsByUserIdController(
+    getProjectsByUserIdUseCase,
+  )
+
+  return getProjectsByUserIdController
 }
