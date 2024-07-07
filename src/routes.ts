@@ -3,6 +3,7 @@ import {
   makeAuthUserController,
   makeCreateProjectController,
   makeCreateUserController,
+  makeGetProjectByIdController,
   makeGetProjectByNameController,
   makeGetUserByEmailController,
 } from "./factories/controllers"
@@ -93,6 +94,20 @@ router.get(
 
     const { statusCode, body } = await getProjectByNameController.execute(
       req.body.name,
+    )
+
+    res.status(statusCode).json(body)
+  },
+)
+
+router.get(
+  "/api/project/:id",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const getProjectByIdController = makeGetProjectByIdController()
+
+    const { statusCode, body } = await getProjectByIdController.execute(
+      req.params.id,
     )
 
     res.status(statusCode).json(body)
