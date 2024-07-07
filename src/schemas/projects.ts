@@ -83,3 +83,13 @@ export const getProjectByNameSchema = z.object({
       message: "Name must be at most 50 characters.",
     }),
 })
+
+export const getProjectByIdSchema = z.object({
+  id: z
+    .string({
+      required_error: "ID is required.",
+    })
+    .uuid({
+      message: "ID must be a valid UUID.",
+    }),
+})
