@@ -36,6 +36,7 @@ export class CreateProjectController {
         return badRequest(error.message)
       }
 
+      console.log(error)
       return internalServerError("Internal server error")
     }
   }
