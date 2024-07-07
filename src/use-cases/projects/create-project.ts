@@ -1,23 +1,22 @@
-import { PostgresCreateProjectRepository } from "../../repositories/postgres"
+import {
+  PostgresCreateProjectRepository,
+  PostgresGetProjectByNameRepository,
+} from "../../repositories/postgres"
 
 import { CreateProjectParams } from "../../@types/create-project"
-import { prisma } from "../../app"
 import { ProjectNameAlreadyExistsError } from "../../errors/project"
 
 export class CreateProjectUseCase {
   constructor(
     private postgresCreateProjectRepository: PostgresCreateProjectRepository,
+    private postgresGetProjectByNameRepository: PostgresGetProjectByNameRepository,
   ) {
     this.postgresCreateProjectRepository = postgresCreateProjectRepository
   }
 
   async execute({ params }: CreateProjectParams) {
-    //FIXME: Refactor, add PostgresGetProjectByNameRepository
-    const nameProjectAlreadyExists = await prisma.projects.findFirst({
-      where: {
-        name: params.name,
-      },
-    })
+    const nameProjectAlreadyExists =
+      await this.postgresGetProjectByNameRepository.execute(params.name)
 
     if (nameProjectAlreadyExists) {
       throw new ProjectNameAlreadyExistsError(params.name)

@@ -10,9 +10,12 @@ import { CreateProjectUseCase, GetProjectByNameUseCase } from "../../use-cases"
 
 export const makeCreateProjectController = () => {
   const postgresCreateProjectRepository = new PostgresCreateProjectRepository()
+  const postgresGetProjectByNameRepository =
+    new PostgresGetProjectByNameRepository()
 
   const createProjectUseCase = new CreateProjectUseCase(
     postgresCreateProjectRepository,
+    postgresGetProjectByNameRepository,
   )
 
   const createProjectController = new CreateProjectController(
