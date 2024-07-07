@@ -5,18 +5,23 @@ import { badRequest, internalServerError } from "../../errors"
 import { ProjectNameAlreadyExistsError } from "../../errors/project"
 
 import { createProjectsSchema } from "../../schemas/projects"
-import { CreateProjectParams } from "../../@types/create-project"
+import { Projects } from "@prisma/client"
 
+interface CreateProjectControllerParams {
+  httpRequest: Projects
+}
 export class CreateProjectController {
   constructor(private createProjectUseCase: CreateProjectUseCase) {
     this.createProjectUseCase = createProjectUseCase
   }
 
-  async execute({ params }: CreateProjectParams) {
+  async execute({ httpRequest }: CreateProjectControllerParams) {
     try {
-      await createProjectsSchema.parseAsync(params)
+      await createProjectsSchema.parseAsync(httpRequest)
 
-      const project = await this.createProjectUseCase.execute({ params })
+      const project = await this.createProjectUseCase.execute({
+        params: httpRequest,
+      })
 
       return {
         statusCode: 201,
