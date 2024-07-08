@@ -1,25 +1,25 @@
-import { prisma } from "../../app"
+import {
+  PostgresGetProjectsByUserIdRepository,
+  PostgresGetUserByIdRepository,
+} from "../../repositories/postgres"
+
 import { UserNotFoundError } from "../../errors"
-import { PostgresGetProjectsByUserIdRepository } from "../../repositories/postgres"
 
 export class GetProjectsByUserIdUseCase {
   constructor(
     private postgresGetProjectsByUserIdRepository: PostgresGetProjectsByUserIdRepository,
+    private postgresGetUserByIdRepository: PostgresGetUserByIdRepository,
   ) {
     this.postgresGetProjectsByUserIdRepository =
       postgresGetProjectsByUserIdRepository
+    this.postgresGetUserByIdRepository = postgresGetUserByIdRepository
   }
 
   async execute(userId: string) {
     const projects =
       await this.postgresGetProjectsByUserIdRepository.execute(userId)
 
-    // FIXME: Refactor, add PostgresGetUserByIdRepository
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    })
+    const user = await this.postgresGetUserByIdRepository.execute(userId)
 
     if (!user) {
       throw new UserNotFoundError()

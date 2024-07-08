@@ -10,6 +10,7 @@ import {
   PostgresGetProjectByNameRepository,
   PostgresGetProjectByIdRepository,
   PostgresGetProjectsByUserIdRepository,
+  PostgresGetUserByIdRepository,
 } from "../../repositories/postgres"
 
 import {
@@ -69,9 +70,11 @@ export const makeGetProjectByIdController = () => {
 export const makeGetProjectsByUserIdController = () => {
   const postgresGetProjectsByUserIdRepository =
     new PostgresGetProjectsByUserIdRepository()
+  const postgresGetUserByIdRepository = new PostgresGetUserByIdRepository()
 
   const getProjectsByUserIdUseCase = new GetProjectsByUserIdUseCase(
     postgresGetProjectsByUserIdRepository,
+    postgresGetUserByIdRepository,
   )
 
   const getProjectsByUserIdController = new GetProjectsByUserIdController(
