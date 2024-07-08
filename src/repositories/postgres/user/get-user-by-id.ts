@@ -6,6 +6,12 @@ export class PostgresGetUserByIdRepository {
       where: {
         id: userId,
       },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+      },
     })
 
     return user
