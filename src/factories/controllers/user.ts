@@ -6,11 +6,10 @@ import {
 
 import {
   CreateUserController,
+  AuthUserController,
   GetUserByEmailController,
   GetUserByIdController,
 } from "../../controllers"
-//FIXME: Refactor imports
-import { AuthUserController } from "../../controllers/user/auth-user"
 
 import {
   PostgresCreateUserRepository,
@@ -20,10 +19,10 @@ import {
 
 import {
   CreateUserUseCase,
+  AuthUserUseCase,
   GetUserByEmailUseCase,
   GetUserByIdUseCase,
 } from "../../use-cases"
-import { AuthUserUseCase } from "../../use-cases/user/auth-user"
 
 export const makeCreateUserController = () => {
   const createUserRepository = new PostgresCreateUserRepository()
