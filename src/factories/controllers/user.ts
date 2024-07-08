@@ -7,15 +7,22 @@ import {
 import {
   CreateUserController,
   GetUserByEmailController,
+  GetUserByIdController,
 } from "../../controllers"
+//FIXME: Refactor imports
 import { AuthUserController } from "../../controllers/user/auth-user"
 
 import {
   PostgresCreateUserRepository,
   PostgresGetUserByEmailRepository,
+  PostgresGetUserByIdRepository,
 } from "../../repositories/postgres"
 
-import { CreateUserUseCase, GetUserByEmailUseCase } from "../../use-cases"
+import {
+  CreateUserUseCase,
+  GetUserByEmailUseCase,
+  GetUserByIdUseCase,
+} from "../../use-cases"
 import { AuthUserUseCase } from "../../use-cases/user/auth-user"
 
 export const makeCreateUserController = () => {
@@ -65,4 +72,16 @@ export const makeAuthUserController = () => {
   const authUserController = new AuthUserController(authUserUseCase)
 
   return authUserController
+}
+
+export const makeGetUserByIdController = () => {
+  const postgresGetUserByIdRepository = new PostgresGetUserByIdRepository()
+
+  const getUserByIdUseCase = new GetUserByIdUseCase(
+    postgresGetUserByIdRepository,
+  )
+
+  const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
+
+  return getUserByIdController
 }
