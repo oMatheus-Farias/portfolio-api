@@ -63,3 +63,14 @@ export const authUserSchema = z.object({
     .trim()
     .min(8, { message: "Password must be at least 8 characters." }),
 })
+
+export const getUserByIdSchema = z.object({
+  userId: z
+    .string({
+      required_error: "User ID is required.",
+    })
+    .trim()
+    .uuid({
+      message: "Invalid user ID.",
+    }),
+})
