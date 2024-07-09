@@ -12,7 +12,7 @@ import {
 } from "../../errors"
 import { ZodError } from "zod"
 
-import { updateProjectSchema } from "../../schemas/projects"
+import { updateAndDeleteProjectSchema } from "../../schemas/projects"
 import { checkIfIdIsValid } from "../../helpers/validation-id"
 import { UpdateProjectParams } from "../../@types/update-project"
 
@@ -23,7 +23,7 @@ export class UpdateProjectController {
 
   async execute(updateParams: UpdateProjectParams) {
     try {
-      await updateProjectSchema.parseAsync(updateParams)
+      await updateAndDeleteProjectSchema.parseAsync(updateParams)
 
       const userIdIsValid = checkIfIdIsValid(updateParams.userId)
       const projectIdIsValid = checkIfIdIsValid(updateParams.projectId)
