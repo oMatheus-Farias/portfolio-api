@@ -17,8 +17,5 @@ export const checkProjectExists = (
   { project }: ListProjectsProps,
   projectName: string,
 ) => {
-  return project.some(
-    (project) =>
-      project.name.trim().toLowerCase === projectName.trim().toLowerCase,
-  )
+  return project.some((project) => project.name === projectName)
 }
