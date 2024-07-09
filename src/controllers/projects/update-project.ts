@@ -6,7 +6,9 @@ import {
   notFound,
   ProjectNameAlreadyExistsError,
   ProjectNotFoundError,
+  unauthorized,
   UserNotFoundError,
+  UserUnauthorizedError,
 } from "../../errors"
 import { ZodError } from "zod"
 
@@ -44,11 +46,15 @@ export class UpdateProjectController {
         return badRequest(error.errors[0].message)
       }
 
-      if (error instanceof UserNotFoundError) {
+      if (error instanceof ProjectNotFoundError) {
         return notFound(error.message)
       }
 
-      if (error instanceof ProjectNotFoundError) {
+      if (error instanceof UserUnauthorizedError) {
+        return unauthorized(error.message)
+      }
+
+      if (error instanceof UserNotFoundError) {
         return notFound(error.message)
       }
 

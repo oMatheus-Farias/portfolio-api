@@ -13,3 +13,10 @@ export class UserNotFoundError extends Error {
     this.name = "UserNotFoundError"
   }
 }
+
+export class UserUnauthorizedError extends Error {
+  constructor() {
+    super("User is not authorized to perform this action")
+    this.name = "UserUnauthorizedError"
+  }
+}

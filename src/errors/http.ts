@@ -5,6 +5,13 @@ export const badRequest = (message: string) => ({
   },
 })
 
+export const unauthorized = (message: string) => ({
+  statusCode: 401,
+  body: {
+    message,
+  },
+})
+
 export const notFound = (message: string) => ({
   statusCode: 404,
   body: {
