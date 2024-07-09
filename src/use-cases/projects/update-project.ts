@@ -9,6 +9,7 @@ import {
   UserNotFoundError,
   ProjectNotFoundError,
   ProjectNameAlreadyExistsError,
+  UserUnauthorizedError,
 } from "../../errors"
 
 import { checkProjectExists } from "../../helpers/check-project-exists"
@@ -30,20 +31,28 @@ export class UpdateProjectUseCase {
   }
 
   async execute(updateParams: UpdateProjectParams) {
-    const userAlreadyExists = await this.postgresGetUserByIdRepository.execute(
-      updateParams.userId,
-    )
     const projectAlreadyExists =
       await this.postgresGetProjectByIdRepository.execute(
         updateParams.projectId,
       )
 
+    if (!projectAlreadyExists) {
+      throw new ProjectNotFoundError()
+    }
+
+    const userAlreadyExists = await this.postgresGetUserByIdRepository.execute(
+      updateParams.userId,
+    )
+
+    const userAuthenticated =
+      projectAlreadyExists.userId === updateParams.userId
+
     if (!userAlreadyExists) {
       throw new UserNotFoundError()
     }
 
-    if (!projectAlreadyExists) {
-      throw new ProjectNotFoundError()
+    if (!userAuthenticated) {
+      throw new UserUnauthorizedError()
     }
 
     const registeredProjects =
