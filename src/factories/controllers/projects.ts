@@ -3,6 +3,7 @@ import {
   GetProjectByNameController,
   GetProjectByIdController,
   GetProjectsByUserIdController,
+  UpdateProjectController,
 } from "../../controllers"
 
 import {
@@ -11,6 +12,7 @@ import {
   PostgresGetProjectByIdRepository,
   PostgresGetProjectsByUserIdRepository,
   PostgresGetUserByIdRepository,
+  PostgresUpdateProjectRepository,
 } from "../../repositories/postgres"
 
 import {
@@ -18,6 +20,7 @@ import {
   GetProjectByNameUseCase,
   GetProjectByIdUseCase,
   GetProjectsByUserIdUseCase,
+  UpdateProjectUseCase,
 } from "../../use-cases"
 
 export const makeCreateProjectController = () => {
@@ -82,4 +85,26 @@ export const makeGetProjectsByUserIdController = () => {
   )
 
   return getProjectsByUserIdController
+}
+
+export const makeUpdateProjectController = () => {
+  const postgresUpdateProjectRepository = new PostgresUpdateProjectRepository()
+  const postgresGetProjectByIdRepository =
+    new PostgresGetProjectByIdRepository()
+  const postgresGetUserByIdRepository = new PostgresGetUserByIdRepository()
+  const postgresGetProjectByUserIdRepository =
+    new PostgresGetProjectsByUserIdRepository()
+
+  const updateProjectUseCase = new UpdateProjectUseCase(
+    postgresUpdateProjectRepository,
+    postgresGetProjectByIdRepository,
+    postgresGetUserByIdRepository,
+    postgresGetProjectByUserIdRepository,
+  )
+
+  const updateProjectController = new UpdateProjectController(
+    updateProjectUseCase,
+  )
+
+  return updateProjectController
 }
