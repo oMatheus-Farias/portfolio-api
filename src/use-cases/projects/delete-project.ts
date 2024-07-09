@@ -1,8 +1,9 @@
-import { ProjectNotFoundError, UserUnauthorizedError } from "../../errors"
 import {
   PostgresDeleteProjectRepository,
   PostgresGetProjectByIdRepository,
 } from "../../repositories/postgres"
+
+import { ProjectNotFoundError, UserUnauthorizedError } from "../../errors"
 
 export class DeleteProjectUseCase {
   constructor(
