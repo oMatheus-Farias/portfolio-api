@@ -8,6 +8,7 @@ import {
   makeGetProjectsByUserIdController,
   makeGetUserByEmailController,
   makeGetUserByIdController,
+  makeUpdateProjectController,
 } from "./factories/controllers"
 
 import { isAuthenticated } from "./middlewares/is-authenticated"
@@ -139,6 +140,22 @@ router.get(
     const { statusCode, body } = await getProjectsByUserIdController.execute(
       req.params.userId,
     )
+
+    res.status(statusCode).json(body)
+  },
+)
+
+router.patch(
+  "/api/project/:projectId",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const updateProjectController = makeUpdateProjectController()
+
+    const { statusCode, body } = await updateProjectController.execute({
+      projectId: req.params.projectId,
+      userId: req.body.userId,
+      updateParams: req.body,
+    })
 
     res.status(statusCode).json(body)
   },
