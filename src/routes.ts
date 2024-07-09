@@ -3,6 +3,7 @@ import {
   makeAuthUserController,
   makeCreateProjectController,
   makeCreateUserController,
+  makeDeleteProjectController,
   makeGetProjectByIdController,
   makeGetProjectByNameController,
   makeGetProjectsByUserIdController,
@@ -156,6 +157,21 @@ router.patch(
       userId: req.body.userId,
       updateParams: req.body,
     })
+
+    res.status(statusCode).json(body)
+  },
+)
+
+router.delete(
+  "/api/project/:projectId",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const deleteProjectController = makeDeleteProjectController()
+
+    const { statusCode, body } = await deleteProjectController.execute(
+      req.params.projectId,
+      req.body.userId,
+    )
 
     res.status(statusCode).json(body)
   },
