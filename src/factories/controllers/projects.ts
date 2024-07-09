@@ -5,6 +5,7 @@ import {
   GetProjectsByUserIdController,
   UpdateProjectController,
 } from "../../controllers"
+import { DeleteProjectController } from "../../controllers/projects/delete-project"
 
 import {
   PostgresCreateProjectRepository,
@@ -13,6 +14,7 @@ import {
   PostgresGetProjectsByUserIdRepository,
   PostgresGetUserByIdRepository,
   PostgresUpdateProjectRepository,
+  PostgresDeleteProjectRepository,
 } from "../../repositories/postgres"
 
 import {
@@ -21,6 +23,7 @@ import {
   GetProjectByIdUseCase,
   GetProjectsByUserIdUseCase,
   UpdateProjectUseCase,
+  DeleteProjectUseCase,
 } from "../../use-cases"
 
 export const makeCreateProjectController = () => {
@@ -107,4 +110,21 @@ export const makeUpdateProjectController = () => {
   )
 
   return updateProjectController
+}
+
+export const makeDeleteProjectController = () => {
+  const postgresDeleteProjectRepository = new PostgresDeleteProjectRepository()
+  const postgresGetProjectByIdRepository =
+    new PostgresGetProjectByIdRepository()
+
+  const deleteProjectUseCase = new DeleteProjectUseCase(
+    postgresDeleteProjectRepository,
+    postgresGetProjectByIdRepository,
+  )
+
+  const deleteProjectController = new DeleteProjectController(
+    deleteProjectUseCase,
+  )
+
+  return deleteProjectController
 }
