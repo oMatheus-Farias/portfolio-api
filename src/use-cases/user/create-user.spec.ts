@@ -2,8 +2,9 @@ import { describe, it, expect, vitest } from "vitest"
 
 import { CreateUserUseCase } from "./create-user"
 
-import { faker } from "@faker-js/faker"
 import bcrypt from "bcrypt"
+import { faker } from "@faker-js/faker"
+
 import { EmailAlreadyExistsError } from "../../errors"
 
 describe("Create User UseCase", () => {
@@ -74,5 +75,17 @@ describe("Create User UseCase", () => {
     await expect(response).rejects.toThrow(
       new EmailAlreadyExistsError(user.email),
     )
+  })
+
+  it("should hasher the password before creating the user", async () => {
+    const { sut, passwordHasherAdapterStub } = makeSut()
+
+    const spy = vitest
+      .spyOn(passwordHasherAdapterStub, "execute")
+      .mockResolvedValueOnce(user.password)
+
+    await sut.execute({ params: user })
+
+    expect(spy).toHaveBeenCalledWith(user.password)
   })
 })
