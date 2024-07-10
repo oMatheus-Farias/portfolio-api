@@ -1,9 +1,10 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vitest } from "vitest"
 
 import { CreateUserUseCase } from "./create-user"
 
 import { faker } from "@faker-js/faker"
 import bcrypt from "bcrypt"
+import { EmailAlreadyExistsError } from "../../errors"
 
 describe("Create User UseCase", () => {
   const user = {
@@ -59,5 +60,19 @@ describe("Create User UseCase", () => {
     const response = sut.execute({ params: user })
 
     expect(response).toBeTruthy()
+  })
+
+  it("should throw an EmailAlreadyExistsError if the email already exists", async () => {
+    const { sut, postgresGetUserByEmailRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce(user)
+
+    const response = sut.execute({ params: user })
+
+    await expect(response).rejects.toThrow(
+      new EmailAlreadyExistsError(user.email),
+    )
   })
 })
