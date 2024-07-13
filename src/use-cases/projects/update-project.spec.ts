@@ -5,7 +5,11 @@ import { UpdateProjectUseCase } from "./update-project"
 import { faker } from "@faker-js/faker"
 import { UpdateProjectParams } from "../../@types/update-project"
 
-import { ProjectNotFoundError, UserNotFoundError } from "../../errors"
+import {
+  ProjectNotFoundError,
+  UserNotFoundError,
+  UserUnauthorizedError,
+} from "../../errors"
 
 describe("Update Project UseCase", () => {
   const user = {
@@ -129,5 +133,19 @@ describe("Update Project UseCase", () => {
     })
 
     await expect(result).rejects.toThrow(new UserNotFoundError())
+  })
+
+  it("should throw UserUnauthorizedError if user is not the owner of the project", async () => {
+    const { sut } = makeSut()
+
+    const result = sut.execute({
+      userId: faker.string.uuid(),
+      projectId: project.id,
+      updateParams: {
+        name: "New Name",
+      },
+    })
+
+    await expect(result).rejects.toThrow(new UserUnauthorizedError())
   })
 })
