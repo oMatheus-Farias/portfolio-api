@@ -6,10 +6,6 @@ import { PostgresGetUserByEmailRepository } from "./get-user-by-email"
 import { faker } from "@faker-js/faker"
 
 describe("Postgres Get User By Email Repository", () => {
-  beforeEach(async () => {
-    await prisma.user.deleteMany()
-  })
-
   const createUserParams = {
     id: faker.string.uuid(),
     firstName: faker.person.firstName(),

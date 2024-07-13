@@ -8,7 +8,6 @@ import { faker } from "@faker-js/faker"
 describe("Postgres Get Project By Id Repository", () => {
   beforeEach(async () => {
     await prisma.projects.deleteMany()
-    await prisma.user.deleteMany()
   })
 
   const createUserParams = {
