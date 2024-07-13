@@ -58,4 +58,19 @@ describe("Auth User UseCase", () => {
 
     expect(result).not.toBe(null)
   })
+
+  it("should token is returned when user is authenticated", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute(user.email, user.password)
+
+    const userAuth = {
+      ...user,
+      password: undefined,
+      token: result.token,
+    }
+
+    expect(result).toEqual(userAuth)
+    expect(result.token).not.toBe(null)
+  })
 })
