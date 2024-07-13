@@ -3,6 +3,7 @@ import { describe, it, expect, vitest } from "vitest"
 import { CreateProjectUseCase } from "./create-project"
 
 import { faker } from "@faker-js/faker"
+import { ProjectNameAlreadyExistsError } from "../../errors"
 
 describe("Create Project UseCase", () => {
   const project = {
@@ -55,5 +56,19 @@ describe("Create Project UseCase", () => {
 
     expect(result).not.toBeNull()
     expect(result).toEqual(project)
+  })
+
+  it("should throw ProjectNameAlreadyExistsError if project name already exists", async () => {
+    const { sut, postgresGetProjectByNameRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByNameRepositoryStub, "execute")
+      .mockRejectedValueOnce(new ProjectNameAlreadyExistsError(project.name))
+
+    const result = sut.execute({ params: project })
+
+    await expect(result).rejects.toThrowError(
+      new ProjectNameAlreadyExistsError(project.name),
+    )
   })
 })
