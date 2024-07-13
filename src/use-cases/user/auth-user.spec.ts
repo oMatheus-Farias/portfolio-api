@@ -87,4 +87,16 @@ describe("Auth User UseCase", () => {
 
     await expect(result).rejects.toThrow(new UserNotFoundError(user.email))
   })
+
+  it("should throw UserNotFoundError if password not match", async () => {
+    const { sut, passwordCompareAdapterStub } = makeSut()
+
+    vitest
+      .spyOn(passwordCompareAdapterStub, "execute")
+      .mockResolvedValueOnce(false)
+
+    const result = sut.execute(user.email, user.password)
+
+    await expect(result).rejects.toThrow(new UserNotFoundError())
+  })
 })
