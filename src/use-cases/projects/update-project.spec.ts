@@ -4,7 +4,8 @@ import { UpdateProjectUseCase } from "./update-project"
 
 import { faker } from "@faker-js/faker"
 import { UpdateProjectParams } from "../../@types/update-project"
-import { ProjectNotFoundError } from "../../errors"
+
+import { ProjectNotFoundError, UserNotFoundError } from "../../errors"
 
 describe("Update Project UseCase", () => {
   const user = {
@@ -110,5 +111,23 @@ describe("Update Project UseCase", () => {
     })
 
     await expect(result).rejects.toThrow(new ProjectNotFoundError())
+  })
+
+  it("should throw UserNotFoundError if user does not exist", async () => {
+    const { sut, postgresGetUserByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByIdRepositoryStub, "execute")
+      .mockRejectedValueOnce(new UserNotFoundError())
+
+    const result = sut.execute({
+      userId: project.userId,
+      projectId: project.id,
+      updateParams: {
+        name: "New Name",
+      },
+    })
+
+    await expect(result).rejects.toThrow(new UserNotFoundError())
   })
 })
