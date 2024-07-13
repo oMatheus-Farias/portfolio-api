@@ -3,7 +3,7 @@ import { describe, it, expect, vitest } from "vitest"
 import { DeleteProjectUseCase } from "./delete-project"
 
 import { faker } from "@faker-js/faker"
-import { ProjectNotFoundError } from "../../errors"
+import { ProjectNotFoundError, UserUnauthorizedError } from "../../errors"
 
 describe("Delete Project UseCase", () => {
   const project = {
@@ -68,5 +68,20 @@ describe("Delete Project UseCase", () => {
     const result = sut.execute(project.id, project.userId)
 
     await expect(result).rejects.toThrow(new ProjectNotFoundError())
+  })
+
+  it("should throw UserUnauthorizedError if user is not authorized", async () => {
+    const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce({
+        ...project,
+        userId: faker.string.uuid(),
+      })
+
+    const result = sut.execute(project.id, project.userId)
+
+    await expect(result).rejects.toThrow(new UserUnauthorizedError())
   })
 })
