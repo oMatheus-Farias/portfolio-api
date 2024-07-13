@@ -78,4 +78,16 @@ describe("Get Projects By User Id UseCase", () => {
 
     await expect(result).rejects.toThrow(new UserNotFoundError())
   })
+
+  it("should return an empty array if user has no projects", async () => {
+    const { sut, postgresGetProjectsByUserIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectsByUserIdRepositoryStub, "execute")
+      .mockResolvedValueOnce([])
+
+    const result = await sut.execute(user.id)
+
+    expect(result).toEqual([])
+  })
 })
