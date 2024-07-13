@@ -1,8 +1,9 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vitest } from "vitest"
 
 import { GetUserByEmailUseCase } from "./get-user-by-email"
 
 import { faker } from "@faker-js/faker"
+import { UserNotFoundError } from "../../errors"
 
 describe("Get User By Email UseCase", () => {
   const user = {
@@ -38,5 +39,17 @@ describe("Get User By Email UseCase", () => {
 
     expect(result).not.toBeNull()
     expect(result).toEqual(user)
+  })
+
+  it("should throw UserNotFoundError if user is not found", async () => {
+    const { sut, postgresGetUserByEmailRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
+
+    const result = sut.execute(user.email)
+
+    await expect(result).rejects.toThrowError(new UserNotFoundError(user.email))
   })
 })
