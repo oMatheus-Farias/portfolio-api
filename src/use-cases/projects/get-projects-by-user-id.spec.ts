@@ -3,6 +3,7 @@ import { describe, it, expect, vitest } from "vitest"
 import { GetProjectsByUserIdUseCase } from "./get-projects-by-user-id"
 
 import { faker } from "@faker-js/faker"
+import { UserNotFoundError } from "../../errors"
 
 describe("Get Projects By User Id UseCase", () => {
   const project = {
@@ -64,5 +65,17 @@ describe("Get Projects By User Id UseCase", () => {
 
     expect(result).not.toBeNull()
     expect(result).toEqual([project])
+  })
+
+  it("should throw UserNotFoundError if user does not exist", async () => {
+    const { sut, postgresGetUserByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByIdRepositoryStub, "execute")
+      .mockRejectedValueOnce(new UserNotFoundError())
+
+    const result = sut.execute(user.id)
+
+    await expect(result).rejects.toThrow(new UserNotFoundError())
   })
 })
