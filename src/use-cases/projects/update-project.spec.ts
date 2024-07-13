@@ -6,6 +6,7 @@ import { faker } from "@faker-js/faker"
 import { UpdateProjectParams } from "../../@types/update-project"
 
 import {
+  ProjectNameAlreadyExistsError,
   ProjectNotFoundError,
   UserNotFoundError,
   UserUnauthorizedError,
@@ -147,5 +148,21 @@ describe("Update Project UseCase", () => {
     })
 
     await expect(result).rejects.toThrow(new UserUnauthorizedError())
+  })
+
+  it("should throw ProjectNameAlreadyExistsError if project name already exists", async () => {
+    const { sut } = makeSut()
+
+    const result = sut.execute({
+      userId: project.userId,
+      projectId: project.id,
+      updateParams: {
+        name: project.name,
+      },
+    })
+
+    await expect(result).rejects.toThrow(
+      new ProjectNameAlreadyExistsError(project.name),
+    )
   })
 })
