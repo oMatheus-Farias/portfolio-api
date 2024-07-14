@@ -5,6 +5,7 @@ import { CreateUserUseCase } from "../../use-cases"
 
 import { faker } from "@faker-js/faker"
 import { ZodError } from "zod"
+import { EmailAlreadyExistsError } from "../../errors"
 
 describe("Create User Controller", () => {
   const user = {
@@ -70,6 +71,20 @@ describe("Create User Controller", () => {
 
     const result = await sut.execute({
       httRequest: null,
+    })
+
+    expect(result.statusCode).toBe(400)
+  })
+
+  it("should return error 400 if email already exists", async () => {
+    const { sut, createUserUseCaseStub } = makeSut()
+
+    vitest
+      .spyOn(createUserUseCaseStub, "execute")
+      .mockRejectedValueOnce(new EmailAlreadyExistsError(user.email))
+
+    const result = await sut.execute({
+      httRequest: user,
     })
 
     expect(result.statusCode).toBe(400)
