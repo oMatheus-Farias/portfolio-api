@@ -62,20 +62,20 @@ describe("Delete Project Controller", () => {
     })
   })
 
-  it("should return 404 if project ID is not valid", async () => {
+  it("should return 400 if project ID is not valid", async () => {
     const { sut } = makeSut()
 
     const result = await sut.execute("invalid_id", project.userId)
 
-    expect(result.statusCode).toBe(404)
+    expect(result.statusCode).toBe(400)
   })
 
-  it("should return 404 if user ID is not valid", async () => {
+  it("should return 400 if user ID is not valid", async () => {
     const { sut } = makeSut()
 
     const result = await sut.execute(project.id, "invalid_id")
 
-    expect(result.statusCode).toBe(404)
+    expect(result.statusCode).toBe(400)
   })
 
   it("should return 404 if project not found", async () => {
