@@ -2,6 +2,7 @@ import { UpdateProjectUseCase } from "../../use-cases/projects/update-project"
 
 import {
   badRequest,
+  conflict,
   internalServerError,
   notFound,
   ProjectNameAlreadyExistsError,
@@ -63,7 +64,7 @@ export class UpdateProjectController {
       }
 
       if (error instanceof ProjectNameAlreadyExistsError) {
-        return badRequest(error.message)
+        return conflict(error.message)
       }
 
       console.log(error)
