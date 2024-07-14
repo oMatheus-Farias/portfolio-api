@@ -6,10 +6,6 @@ import { PostgresGetProjectByIdRepository } from "./get-project-by-id"
 import { faker } from "@faker-js/faker"
 
 describe("Postgres Get Project By Id Repository", () => {
-  beforeEach(async () => {
-    await prisma.projects.deleteMany()
-  })
-
   const createUserParams = {
     id: faker.string.uuid(),
     firstName: faker.person.firstName(),
