@@ -136,4 +136,18 @@ describe("Update Project Controller", () => {
 
     expect(result.statusCode).toBe(400)
   })
+
+  it("should return 400 if project id invalid", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute({
+      projectId: "invalid_id",
+      userId: project.userId,
+      updateParams: {
+        name: "new name",
+      },
+    })
+
+    expect(result.statusCode).toBe(400)
+  })
 })
