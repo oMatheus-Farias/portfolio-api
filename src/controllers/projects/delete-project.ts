@@ -1,6 +1,7 @@
 import { DeleteProjectUseCase } from "../../use-cases"
 
 import {
+  badRequest,
   internalServerError,
   notFound,
   ProjectNotFoundError,
@@ -53,7 +54,7 @@ export class DeleteProjectController {
       }
 
       if (error instanceof ZodError) {
-        return notFound(error.errors[0].message)
+        return badRequest(error.errors[0].message)
       }
 
       console.log(error)
