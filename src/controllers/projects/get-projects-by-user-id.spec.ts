@@ -97,4 +97,16 @@ describe("Get Projects By User Id Controller", () => {
 
     expect(result.statusCode).toBe(404)
   })
+
+  it("should return 500 if any error occurs", async () => {
+    const { sut, postgresGetProjectsByUserIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectsByUserIdRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error())
+
+    const result = await sut.execute(user.id)
+
+    expect(result.statusCode).toBe(500)
+  })
 })
