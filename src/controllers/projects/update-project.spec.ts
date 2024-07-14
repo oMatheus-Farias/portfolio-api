@@ -228,4 +228,22 @@ describe("Update Project Controller", () => {
 
     expect(result.statusCode).toBe(409)
   })
+
+  it("should return 500 if any error occurs", async () => {
+    const { sut, postgresUpdateProjectRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresUpdateProjectRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error())
+
+    const result = await sut.execute({
+      projectId: project.id,
+      userId: project.userId,
+      updateParams: {
+        name: "new name",
+      },
+    })
+
+    expect(result.statusCode).toBe(500)
+  })
 })
