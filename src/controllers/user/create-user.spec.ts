@@ -4,7 +4,6 @@ import { CreateUserController } from "./create-user"
 import { CreateUserUseCase } from "../../use-cases"
 
 import { faker } from "@faker-js/faker"
-import { ZodError } from "zod"
 import { EmailAlreadyExistsError } from "../../errors"
 
 describe("Create User Controller", () => {
