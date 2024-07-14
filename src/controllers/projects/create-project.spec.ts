@@ -75,4 +75,18 @@ describe("Create Project Controller", () => {
 
     expect(response.statusCode).toBe(400)
   })
+
+  it("should return 500 if any error occurs", async () => {
+    const { sut, postgresCreateProjectRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresCreateProjectRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error())
+
+    const response = await sut.execute({
+      httpRequest: project,
+    })
+
+    expect(response.statusCode).toBe(500)
+  })
 })
