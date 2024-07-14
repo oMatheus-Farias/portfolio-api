@@ -39,11 +39,19 @@ describe("Get User By Email Controller", () => {
   it("should return 200 with user by email", async () => {
     const { sut } = makeSut()
 
-    const response = await sut.execute(user.email)
+    const result = await sut.execute(user.email)
 
-    expect(response).toEqual({
+    expect(result).toEqual({
       statusCode: 200,
       body: user,
     })
+  })
+
+  it("should return 400 if email is invalid", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute("invalid_email")
+
+    expect(result.statusCode).toBe(400)
   })
 })
