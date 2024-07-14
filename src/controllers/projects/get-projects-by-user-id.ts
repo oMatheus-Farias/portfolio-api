@@ -40,7 +40,7 @@ export class GetProjectsByUserIdController {
       }
 
       if (error instanceof ZodError) {
-        return notFound(error.errors[0].message)
+        return badRequest(error.errors[0].message)
       }
 
       console.log(error)
