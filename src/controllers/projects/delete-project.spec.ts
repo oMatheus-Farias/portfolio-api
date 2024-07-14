@@ -77,4 +77,16 @@ describe("Delete Project Controller", () => {
 
     expect(result.statusCode).toBe(404)
   })
+
+  it("should return 404 if project not found", async () => {
+    const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
+
+    const result = await sut.execute(project.id, project.userId)
+
+    expect(result.statusCode).toBe(404)
+  })
 })
