@@ -3,6 +3,7 @@ import { describe, it, expect, vitest } from "vitest"
 import { GetUserByIdController } from "./get-user-by-id"
 import { GetUserByIdUseCase } from "../../use-cases"
 
+import { UserNotFoundError } from "../../errors"
 import { faker } from "@faker-js/faker"
 
 describe("Get User By Id Controller", () => {
@@ -61,5 +62,17 @@ describe("Get User By Id Controller", () => {
     const result = await sut.execute("")
 
     expect(result.statusCode).toBe(400)
+  })
+
+  it("should return 404 if user is not found", async () => {
+    const { sut, getUserByIdUseCaseStub } = makeSut()
+
+    vitest
+      .spyOn(getUserByIdUseCaseStub, "execute")
+      .mockRejectedValueOnce(new UserNotFoundError())
+
+    const result = await sut.execute(user.id)
+
+    expect(result.statusCode).toBe(404)
   })
 })
