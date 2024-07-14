@@ -51,4 +51,12 @@ describe("Get Project By Id Controller", () => {
       body: project,
     })
   })
+
+  it("should return 400 if project id is invalid", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute("invalid-id")
+
+    expect(result.statusCode).toBe(400)
+  })
 })
