@@ -101,4 +101,16 @@ describe("Delete Project Controller", () => {
 
     expect(result.statusCode).toBe(401)
   })
+
+  it("should return 500 if any error occurs", async () => {
+    const { sut, postgresDeleteProjectRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresDeleteProjectRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error())
+
+    const result = await sut.execute(project.id, project.userId)
+
+    expect(result.statusCode).toBe(500)
+  })
 })
