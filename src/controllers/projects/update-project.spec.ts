@@ -165,6 +165,20 @@ describe("Update Project Controller", () => {
     expect(result.statusCode).toBe(400)
   })
 
+  it("should return 401 if user unauthorized", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute({
+      projectId: project.id,
+      userId: faker.string.uuid(),
+      updateParams: {
+        name: "new name",
+      },
+    })
+
+    expect(result.statusCode).toBe(401)
+  })
+
   it("should return 404 if project not found", async () => {
     const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
 
@@ -183,17 +197,21 @@ describe("Update Project Controller", () => {
     expect(result.statusCode).toBe(404)
   })
 
-  it("should return 401 if user unauthorized", async () => {
-    const { sut } = makeSut()
+  it("should return 404 if user not found", async () => {
+    const { sut, postgresGetUserByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
 
     const result = await sut.execute({
       projectId: project.id,
-      userId: faker.string.uuid(),
+      userId: project.userId,
       updateParams: {
         name: "new name",
       },
     })
 
-    expect(result.statusCode).toBe(401)
+    expect(result.statusCode).toBe(404)
   })
 })
