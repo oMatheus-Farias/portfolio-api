@@ -76,6 +76,19 @@ describe("Create Project Controller", () => {
     expect(response.statusCode).toBe(400)
   })
 
+  it("should return 400 if any validation error occurs", async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.execute({
+      httpRequest: {
+        ...project,
+        name: "",
+      },
+    })
+
+    expect(response.statusCode).toBe(400)
+  })
+
   it("should return 500 if any error occurs", async () => {
     const { sut, postgresCreateProjectRepositoryStub } = makeSut()
 
