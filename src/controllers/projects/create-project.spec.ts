@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vitest } from "vitest"
 
 import { CreateProjectController } from "./create-project"
 import { CreateProjectUseCase } from "../../use-cases"
@@ -60,5 +60,19 @@ describe("Create Project Controller", () => {
 
     expect(response.statusCode).toBe(201)
     expect(response.body).toBe(project)
+  })
+
+  it("should return 400 if project name already exists", async () => {
+    const { sut, postgresGetProjectByNameRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByNameRepositoryStub, "execute")
+      .mockResolvedValueOnce(project)
+
+    const response = await sut.execute({
+      httpRequest: project,
+    })
+
+    expect(response.statusCode).toBe(400)
   })
 })
