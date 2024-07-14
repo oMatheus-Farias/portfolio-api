@@ -4,7 +4,7 @@ import { checkIfIdIsValid } from "../../helpers/validation-id"
 
 import { ZodError } from "zod"
 import { ProjectNotFoundError } from "../../errors/project"
-import { badRequest, internalServerError } from "../../errors"
+import { badRequest, internalServerError, notFound } from "../../errors"
 
 import { getByIdSchema } from "../../schemas/projects"
 
@@ -37,7 +37,7 @@ export class GetProjectByIdController {
       }
 
       if (error instanceof ProjectNotFoundError) {
-        return badRequest(error.message)
+        return notFound(error.message)
       }
 
       console.log(error)
