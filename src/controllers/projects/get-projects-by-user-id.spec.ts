@@ -85,4 +85,16 @@ describe("Get Projects By User Id Controller", () => {
 
     expect(result.statusCode).toBe(400)
   })
+
+  it("should return 404 if user not found", async () => {
+    const { sut, postgresGetUserByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetUserByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
+
+    const result = await sut.execute(user.id)
+
+    expect(result.statusCode).toBe(404)
+  })
 })
