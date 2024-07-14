@@ -69,4 +69,12 @@ describe("Get Projects By User Id Controller", () => {
       body: [project],
     })
   })
+
+  it("should return 400 if user id missing", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute("")
+
+    expect(result.statusCode).toBe(400)
+  })
 })
