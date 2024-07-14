@@ -34,6 +34,10 @@ export class UpdateProjectController {
         )
       }
 
+      if (!updateParams.updateParams) {
+        return badRequest("Please provide the fields to update the project.")
+      }
+
       const updatedProject =
         await this.updateProjectUseCase.execute(updateParams)
 
