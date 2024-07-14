@@ -89,4 +89,16 @@ describe("Delete Project Controller", () => {
 
     expect(result.statusCode).toBe(404)
   })
+
+  it("should return 401 if user is unauthorized", async () => {
+    const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce({ ...project, userId: "unauthorized_user_id" })
+
+    const result = await sut.execute(project.id, project.userId)
+
+    expect(result.statusCode).toBe(401)
+  })
 })
