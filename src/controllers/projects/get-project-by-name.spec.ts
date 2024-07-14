@@ -51,4 +51,12 @@ describe("Get Project By Name Controller", () => {
       body: project,
     })
   })
+
+  it("should return 400 if project name missing", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute("")
+
+    expect(result.statusCode).toBe(400)
+  })
 })
