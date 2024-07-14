@@ -19,6 +19,13 @@ export const notFound = (message: string) => ({
   },
 })
 
+export const conflict = (message: string) => ({
+  statusCode: 409,
+  body: {
+    message,
+  },
+})
+
 export const internalServerError = (message: string) => ({
   statusCode: 500,
   body: {
