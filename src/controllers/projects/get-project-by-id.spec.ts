@@ -67,4 +67,16 @@ describe("Get Project By Id Controller", () => {
 
     expect(result.statusCode).toBe(400)
   })
+
+  it("should return 404 if project is not found", async () => {
+    const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
+
+    const result = await sut.execute(project.id)
+
+    expect(result.statusCode).toBe(404)
+  })
 })
