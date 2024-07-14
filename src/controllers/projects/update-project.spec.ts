@@ -182,4 +182,18 @@ describe("Update Project Controller", () => {
 
     expect(result.statusCode).toBe(404)
   })
+
+  it("should return 401 if user unauthorized", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute({
+      projectId: project.id,
+      userId: faker.string.uuid(),
+      updateParams: {
+        name: "new name",
+      },
+    })
+
+    expect(result.statusCode).toBe(401)
+  })
 })
