@@ -214,4 +214,18 @@ describe("Update Project Controller", () => {
 
     expect(result.statusCode).toBe(404)
   })
+
+  it("should return 409 if project name already exists", async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.execute({
+      projectId: project.id,
+      userId: project.userId,
+      updateParams: {
+        name: project.name,
+      },
+    })
+
+    expect(result.statusCode).toBe(409)
+  })
 })
