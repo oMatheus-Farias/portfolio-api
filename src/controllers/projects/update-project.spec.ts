@@ -164,4 +164,22 @@ describe("Update Project Controller", () => {
 
     expect(result.statusCode).toBe(400)
   })
+
+  it("should return 404 if project not found", async () => {
+    const { sut, postgresGetProjectByIdRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(postgresGetProjectByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null)
+
+    const result = await sut.execute({
+      projectId: project.id,
+      userId: project.userId,
+      updateParams: {
+        name: "new name",
+      },
+    })
+
+    expect(result.statusCode).toBe(404)
+  })
 })
