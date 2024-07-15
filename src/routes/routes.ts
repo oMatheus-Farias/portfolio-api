@@ -10,9 +10,9 @@ import {
   makeGetUserByEmailController,
   makeGetUserByIdController,
   makeUpdateProjectController,
-} from "./factories/controllers"
+} from "../factories/controllers"
 
-import { isAuthenticated } from "./middlewares/is-authenticated"
+import { isAuthenticated } from "../middlewares/is-authenticated"
 
 export const router = Router()
 
