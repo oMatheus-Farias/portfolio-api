@@ -83,4 +83,41 @@ describe("Projects routes E2E tests", () => {
 
     expect(_response.status).toBe(200)
   })
+
+  it("GET /api/projects/:userId should return 200 when projects is found", async () => {
+    await request(app).post("/api/user").send({
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: "teste@teste.com",
+      password: "12345678",
+    })
+
+    const response = await request(app).post("/api/user/auth").send({
+      email: "teste@teste.com",
+      password: "12345678",
+    })
+
+    const { id, token } = response.body
+
+    const { body } = await request(app)
+      .post("/api/project")
+      .send({
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        imagesUrl: [faker.internet.url()],
+        repositoryUrl: faker.internet.url(),
+        projectUrl: faker.internet.url(),
+        technologies: [faker.lorem.word()],
+        userId: id,
+      })
+      .set("Authorization", `Bearer ${token}`)
+
+    const userId = body.userId
+
+    const _response = await request(app)
+      .get(`/api/projects/${userId}`)
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(_response.status).toBe(200)
+  })
 })
