@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest"
 import request from "supertest"
 import { app } from "../app"
 
-import { faker } from "@faker-js/faker"
+import { fa, faker } from "@faker-js/faker"
 
 describe("Projects routes E2E tests", () => {
   it("GET /api/project/name should return 200 when project is found", async () => {
@@ -150,5 +150,51 @@ describe("Projects routes E2E tests", () => {
       .set("Authorization", `Bearer ${token}`)
 
     expect(_response.status).toBe(201)
+  })
+
+  it("PATCH /api/project/:projectId should return 200 when project is updated", async () => {
+    await request(app).post("/api/user").send({
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: "teste@teste.com",
+      password: "12345678",
+    })
+
+    const response = await request(app).post("/api/user/auth").send({
+      email: "teste@teste.com",
+      password: "12345678",
+    })
+
+    const { id, token } = response.body
+
+    const _response = await request(app)
+      .post("/api/project")
+      .send({
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        imagesUrl: [faker.internet.url()],
+        repositoryUrl: faker.internet.url(),
+        projectUrl: faker.internet.url(),
+        technologies: [faker.lorem.word()],
+        userId: id,
+      })
+      .set("Authorization", `Bearer ${token}`)
+
+    const projectId = _response.body.id
+
+    const _response2 = await request(app)
+      .patch(`/api/project/${projectId}`)
+      .send({
+        userId: id,
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        imagesUrl: [faker.internet.url()],
+        repositoryUrl: faker.internet.url(),
+        projectUrl: faker.internet.url(),
+        technologies: [faker.lorem.word()],
+      })
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(_response2.status).toBe(200)
   })
 })
