@@ -10,12 +10,12 @@ describe("Projects routes E2E tests", () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: "teste@teste.com",
+      email: "teste1@teste.com",
       password: "12345678",
     })
 
     const response = await request(app).post("/api/user/auth").send({
-      email: "teste@teste.com",
+      email: "teste1@teste.com",
       password: "12345678",
     })
 
@@ -51,12 +51,12 @@ describe("Projects routes E2E tests", () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: "teste@teste.com",
+      email: "teste2@teste.com",
       password: "12345678",
     })
 
     const response = await request(app).post("/api/user/auth").send({
-      email: "teste@teste.com",
+      email: "teste2@teste.com",
       password: "12345678",
     })
 
@@ -88,12 +88,12 @@ describe("Projects routes E2E tests", () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: "teste@teste.com",
+      email: "teste3@teste.com",
       password: "12345678",
     })
 
     const response = await request(app).post("/api/user/auth").send({
-      email: "teste@teste.com",
+      email: "teste3@teste.com",
       password: "12345678",
     })
 
@@ -122,15 +122,15 @@ describe("Projects routes E2E tests", () => {
   })
 
   it("POST /api/project should return 201 when project is created", async () => {
-    await request(app).post("/api/user").send({
+    const teste = await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: "teste@teste.com",
+      email: "teste4@teste.com",
       password: "12345678",
     })
 
     const response = await request(app).post("/api/user/auth").send({
-      email: "teste@teste.com",
+      email: "teste4@teste.com",
       password: "12345678",
     })
 
@@ -156,12 +156,12 @@ describe("Projects routes E2E tests", () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: "teste@teste.com",
+      email: "teste5@teste.com",
       password: "12345678",
     })
 
     const response = await request(app).post("/api/user/auth").send({
-      email: "teste@teste.com",
+      email: "teste5@teste.com",
       password: "12345678",
     })
 
@@ -192,6 +192,46 @@ describe("Projects routes E2E tests", () => {
         repositoryUrl: faker.internet.url(),
         projectUrl: faker.internet.url(),
         technologies: [faker.lorem.word()],
+      })
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(_response2.status).toBe(200)
+  })
+
+  it("DELETE /api/project/:projectId should return 200 when project is deleted", async () => {
+    await request(app).post("/api/user").send({
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: "teste6@teste.com",
+      password: "12345678",
+    })
+
+    const response = await request(app).post("/api/user/auth").send({
+      email: "teste6@teste.com",
+      password: "12345678",
+    })
+
+    const { id, token } = response.body
+
+    const _response = await request(app)
+      .post("/api/project")
+      .send({
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        imagesUrl: [faker.internet.url()],
+        repositoryUrl: faker.internet.url(),
+        projectUrl: faker.internet.url(),
+        technologies: [faker.lorem.word()],
+        userId: id,
+      })
+      .set("Authorization", `Bearer ${token}`)
+
+    const projectId = _response.body.id
+
+    const _response2 = await request(app)
+      .delete(`/api/project/${projectId}`)
+      .send({
+        userId: id,
       })
       .set("Authorization", `Bearer ${token}`)
 
