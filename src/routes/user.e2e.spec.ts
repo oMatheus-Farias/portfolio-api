@@ -6,7 +6,7 @@ import { app } from "../app"
 import { faker } from "@faker-js/faker"
 
 describe("User routes E2E tests", () => {
-  it("GET /api/user/email should return 200 when user is found", async () => {
+  it("GET /api/user/:email should return 200 when user is found", async () => {
     const { body } = await request(app)
       .post("/api/user")
       .send({
@@ -20,14 +20,12 @@ describe("User routes E2E tests", () => {
 
     const email = body.email
 
-    const response = await request(app).get("/api/user/email").send({
-      email,
-    })
+    const response = await request(app).get(`/api/user/${email}`)
 
     expect(response.status).toBe(200)
   })
 
-  it("GET /api/user/:userId should return 200 when user is found", async () => {
+  it("GET /api/user/id/:userId should return 200 when user is found", async () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -43,7 +41,7 @@ describe("User routes E2E tests", () => {
     const { token, id: userId } = response.body
 
     const _response = await request(app)
-      .get(`/api/user/${userId}`)
+      .get(`/api/user/id/${userId}`)
       .set("Authorization", `Bearer ${token}`)
 
     expect(_response.status).toBe(200)
