@@ -55,7 +55,7 @@ router.get("/api/user/:email", async (req: Request, res: Response) => {
 })
 
 router.get(
-  "/api/user/:userId",
+  "/api/user/id/:userId",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const getUserByIdController = makeGetUserByIdController()
