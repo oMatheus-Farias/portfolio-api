@@ -39,11 +39,11 @@ router.post("/api/user", async (req: Request, res: Response) => {
   res.status(statusCode).json(body)
 })
 
-router.get("/api/user/email", async (req: Request, res: Response) => {
+router.get("/api/user/:email", async (req: Request, res: Response) => {
   const getUserByEmailController = makeGetUserByEmailController()
 
   const { statusCode, body } = (await getUserByEmailController.execute(
-    req.body.email,
+    req.params.email,
   )) as unknown as {
     statusCode: number
     body: {
