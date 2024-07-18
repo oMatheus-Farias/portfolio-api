@@ -33,6 +33,36 @@
         }
       }
     },
+    "/api/user/auth": {
+      "post": {
+        "summary": "Authenticate user",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthUserParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User authenticated successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/api/user/{email}": {
       "get": {
         "summary": "Get user by email",
@@ -161,6 +191,19 @@
           "type": "string",
           "example": "Doe"
         },
+        "email": {
+          "type": "string",
+          "example": "john@doe.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
+    "AuthUserParams": {
+      "type": "object",
+      "properties": {
         "email": {
           "type": "string",
           "example": "john@doe.com"
