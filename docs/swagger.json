@@ -347,6 +347,65 @@
           }
         }
       }
+    },
+    "/api/project/{projectId}": {
+      "patch": {
+        "summary": "Update project",
+        "tags": ["Project"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "projectId",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "type": "string",
+                  "example": "4c3c9e07-4ebc-4a28-bad6-3902768af8f8"
+                }
+              }
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateProjectParams"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "400": {
+            "description": "Invalid name"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -496,6 +555,45 @@
         "updatedAt": {
           "type": "string",
           "example": "2021-08-01T00:00:00.000Z"
+        }
+      }
+    },
+    "UpdateProjectParams": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "4c3c9e07-4ebc-4a28-bad6-3902768af8f8"
+        },
+        "name": {
+          "type": "string",
+          "example": "New name"
+        },
+        "description": {
+          "type": "string",
+          "example": "New description"
+        },
+        "imagesUrl": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "https://image.com"
+          }
+        },
+        "repositoryUrl": {
+          "type": "string",
+          "example": "https://github.com"
+        },
+        "projectUrl": {
+          "type": "string",
+          "example": "https://project.com"
+        },
+        "technologies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "Node.js"
+          }
         }
       }
     }
