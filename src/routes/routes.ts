@@ -105,13 +105,13 @@ router.post(
 )
 
 router.get(
-  "/api/project/name",
+  "/api/project/name/:name",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const getProjectByNameController = makeGetProjectByNameController()
 
     const { statusCode, body } = await getProjectByNameController.execute(
-      req.body.name,
+      req.params.name,
     )
 
     res.status(statusCode).json(body)
