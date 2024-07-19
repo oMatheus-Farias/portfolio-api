@@ -163,7 +163,7 @@ router.patch(
 )
 
 router.delete(
-  "/api/project/:projectId",
+  "/api/project/delete/:projectId",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const deleteProjectController = makeDeleteProjectController()
