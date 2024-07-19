@@ -3,10 +3,10 @@ import { describe, it, expect } from "vitest"
 import request from "supertest"
 import { app } from "../app"
 
-import { fa, faker } from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 
 describe("Projects routes E2E tests", () => {
-  it("GET /api/project/name should return 200 when project is found", async () => {
+  it("GET /api/project/name/:name should return 200 when project is found", async () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -37,10 +37,7 @@ describe("Projects routes E2E tests", () => {
     const name = body.name
 
     const _response = await request(app)
-      .get("/api/project/name")
-      .send({
-        name,
-      })
+      .get(`/api/project/name/${name}`)
       .set("Authorization", `Bearer ${token}`)
 
     expect(_response.status).toBe(200)
@@ -198,7 +195,7 @@ describe("Projects routes E2E tests", () => {
     expect(_response2.status).toBe(200)
   })
 
-  it("DELETE /api/project/:projectId should return 200 when project is deleted", async () => {
+  it("DELETE /api/project/delete/:projectId should return 200 when project is deleted", async () => {
     await request(app).post("/api/user").send({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -229,7 +226,7 @@ describe("Projects routes E2E tests", () => {
     const projectId = _response.body.id
 
     const _response2 = await request(app)
-      .delete(`/api/project/${projectId}`)
+      .delete(`/api/project/delete/${projectId}`)
       .send({
         userId: id,
       })
