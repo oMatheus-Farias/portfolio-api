@@ -20,7 +20,6 @@ export class SignToken {
       process.env.JWT_SECRET,
       {
         subject: payload.userId,
-        expiresIn: "30d",
       },
     )
   }
