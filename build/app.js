@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.prisma = exports.app = void 0;
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const routes_1 = require("./routes/routes");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const client_1 = require("@prisma/client");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+exports.app = (0, express_1.default)();
+exports.prisma = new client_1.PrismaClient();
+exports.app.use((0, cors_1.default)());
+exports.app.use(express_1.default.json());
+exports.app.use(routes_1.router);
+const swaggerDocument = JSON.parse(fs_1.default.readFileSync(path_1.default.join(__dirname, "../docs/swagger.json"), "utf8"));
+exports.app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));

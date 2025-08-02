@@ -9,6 +9,7 @@
     "start:dev": "ts-node-dev --transpile-only src/server.ts",
     "start": "node build/server.js",
     "build": "tsc",
+    "vercel-build": "prisma generate",
     "prepare": "husky && prisma generate"
   },
   "keywords": [],
